@@ -8,6 +8,7 @@ contract Heike {
     struct Entity {
         address entityAddress; // Ethereum address of an entity
         bytes32 name; // Entity name
+        // TODO: ADD OWNERSHIPS
     }
     
     mapping (bytes32 => Entity) entities; 
@@ -28,6 +29,7 @@ contract Heike {
 
     struct Freelancer {
         bytes32 ipfsHash; // Hash link to a freelancer's profile
+        // TODO: ADD OWNERSHIPS
     }
 
     mapping (address => Freelancer) freelancers; 
@@ -45,7 +47,10 @@ contract Heike {
     struct Project {
         bytes32 entity;
         address projectAddress;
-        address[] freelancersList; 
+        address[] freelancersList;
+        uint capital;
+        uint time_value;
+        uint totalPayouts;
     }
 
     mapping (bytes32 => Project) projects; 
@@ -63,10 +68,25 @@ contract Heike {
         projects[projectId_].freelancersList.push(freelancer_); // ADD freelancer to the list
     } // TODO: ADD assign multiple freelancers function
     
-    // OWNERSHIP STRUCT
+      // OWNERSHIP STRUCT
+    
+    struct Ownership { // structure of individual project ownership
+        bytes32 projectId;
+        uint capital;
+        uint time_value;
+        uint totalPayouts;
+        
+    }
+    
+    mapping (bytes32 => Ownership) ownerships; 
+    
+    //TODO: generate ownership id function
+    //TODO: calculate ownership function
 
-  
-    // PAYMENT STRUCT
+    // your_sum(capital + time_value- payout) / total_sum(capital + time_value- payout)
+    
+
+    // PAYOUTS STRUCT
     
     
 }
