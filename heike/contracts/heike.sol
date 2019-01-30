@@ -3,27 +3,29 @@ pragma solidity ^0.5.0;
 
 contract Heike {
     
+    bytes32 zeroBytes = 0x0000000000000000000000000000000000000000000000000000000000000000;
+    
     // ENTITY STRUCT:
     
     struct Entity {
-        address entityAddress; // Ethereum address of an entity
+        bytes32 entityId; // Ethereum address of an entity TODO: change to IPFS hash
         bytes32 name; // Entity name
         bytes32[] ownerships; 
     }
     
-    mapping (bytes32 => Entity) entities; 
+    mapping (address => Entity) entities; 
 
     function innitEntity(bytes32 _name) public returns(bytes32){
         
         bytes32 id = keccak256(abi.encodePacked( block.number,  msg.sender));
-        entities[id].entityAddress = msg.sender;
-        entities[id].name = _name;
+        entities[msg.sender].entityId = id;
+        entities[msg.sender].name = _name;
 
         return id;
     }
 
-    function getEntity(bytes32 _id) public view returns(address, bytes32){
-        return(entities[_id].entityAddress, entities[_id].name);
+    function getEntity(address _address) public view returns(bytes32, bytes32){ //TODO: rewrite
+        return(entities[_address].entityId, entities[_address].name);
     }
 
     // FREELANCER STRUCT:
@@ -49,8 +51,8 @@ contract Heike {
         bytes32 entity;
         address projectAddress;
         address[] freelancersList;
-        uint capital;
-        uint time_value;
+        uint totalCapital;
+        uint totalTimeValue;
         uint totalPayouts;
     }
 
@@ -72,10 +74,11 @@ contract Heike {
     // OWNERSHIP STRUCT
     
     struct Ownership { // structure of individual project ownership
+        address owner;
         bytes32 projectId;
         uint capital;
         uint time_value;
-        uint totalPayouts;
+        uint payouts;
     }
     
     mapping (bytes32 => Ownership) ownerships; 
@@ -83,8 +86,19 @@ contract Heike {
     bytes32[] ownershipIds; // TODO: create list for other ids 
     
     function generateOwnershipId(bytes32 projectId_) public returns(bytes32) { // generate ownership id function
+        require(entities[msg.sender].entityId != zeroBytes || freelancers[msg.sender].ipfsHash != zeroBytes,
+        "There is no such owner in the system"); 
+        
         bytes32 id = keccak256(abi.encodePacked( block.number,  msg.sender, projectId_)); //TODO: add more stuff
         ownershipIds.push(id);
+        ownerships[id].owner = msg.sender; 
+        
+        if (entities[msg.sender].entityId == zeroBytes) {  //push to owner's ownerships
+            freelancers[msg.sender].ownerships.push(id);
+        } else {
+            entities[msg.sender].ownerships.push(id);
+        }
+        
         ownerships[id].projectId = projectId_;
         return id;
     }
