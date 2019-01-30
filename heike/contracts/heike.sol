@@ -76,12 +76,19 @@ contract Heike {
         uint capital;
         uint time_value;
         uint totalPayouts;
-        
     }
     
     mapping (bytes32 => Ownership) ownerships; 
     
-    //TODO: generate ownership id function
+    bytes32[] ownershipIds; // TODO: create list for other ids 
+    
+    function generateOwnershipId(bytes32 projectId_) public returns(bytes32) { // generate ownership id function
+        bytes32 id = keccak256(abi.encodePacked( block.number,  msg.sender, projectId_)); //TODO: add more stuff
+        ownershipIds.push(id);
+        ownerships[id].projectId = projectId_;
+        return id;
+    }
+    
     //TODO: calculate ownership function
     
     //TODO: PUSH OWNERSHIP
