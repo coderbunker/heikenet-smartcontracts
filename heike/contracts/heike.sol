@@ -77,8 +77,9 @@ contract Heike {
         address owner;
         bytes32 projectId;
         uint capital;
-        uint time_value;
+        uint timeValue;
         uint payouts;
+        uint totalOwnership;
     }
     
     mapping (bytes32 => Ownership) ownerships; 
@@ -105,10 +106,13 @@ contract Heike {
     
     //TODO: calculate ownership function
     
-    //TODO: PUSH OWNERSHIP
-
-    // your_sum(capital + time_value- payout) / total_sum(capital + time_value- payout)
-    
+    function calculateOwnership(bytes32 ownershipId_) public returns (uint){
+        bytes32 projectId =  ownerships[ownershipId_].projectId;
+        uint ownership = (ownerships[ownershipId_].capital + ownerships[ownershipId_].timeValue+ownerships[ownershipId_].payouts)/(projects[projectId].totalCapital+projects[projectId].totalTimeValue+projects[projectId].totalPayouts);
+        ownerships[ownershipId_].totalOwnership = ownership;
+        return ownership;
+    }
+        
 
     // PAYOUTS STRUCT
     
