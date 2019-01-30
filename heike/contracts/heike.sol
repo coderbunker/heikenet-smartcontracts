@@ -103,9 +103,7 @@ contract Heike {
         ownerships[id].projectId = projectId_;
         return id;
     }
-    
-    //TODO: calculate ownership function
-    
+        
     function calculateOwnership(bytes32 ownershipId_) public returns (uint){
         bytes32 projectId =  ownerships[ownershipId_].projectId;
         uint ownership = (ownerships[ownershipId_].capital + ownerships[ownershipId_].timeValue+ownerships[ownershipId_].payouts)/(projects[projectId].totalCapital+projects[projectId].totalTimeValue+projects[projectId].totalPayouts);

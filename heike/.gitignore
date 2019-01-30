@@ -1,5 +1,4 @@
 .embark
-.json
 chains.json
 config/production/password
 config/livenet/password
