@@ -1,7 +1,8 @@
 pragma solidity ^0.5.0;
+import "./token.sol";
 
 
-contract Heike {
+contract Heike is IssueToken {
     
     bytes32 zeroBytes = 0x0000000000000000000000000000000000000000000000000000000000000000;
     
@@ -113,6 +114,16 @@ contract Heike {
         
 
     // PAYOUTS STRUCT
+
+    struct Payout {
+        address token;
+        address from;
+        address to;
+        uint amount;
+    }
     
+    mapping (bytes32 => Payout) payouts; 
+ 
+
     
 }
