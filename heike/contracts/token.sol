@@ -4,30 +4,60 @@ import "./ERC20/ERC20.sol";
 import "./ERC20/MintableToken.sol";
 import "./ERC20/BurnableToken.sol";
 import "./ERC20/SafeMath.sol";
+import "./ERC20/Ownable.sol";
 
 /**
  * The contractName contract does this and that...
  */
-contract IssueToken is ERC20, MintableToken, BurnableToken {
 
-	using SafeMath for uint256;
+/**
+ * The contractName contract does this and that...
+ */
+contract TokenInfo {
 
-    string public symbol;
-    string public  name;
-    uint8 public decimals;
-    uint public _totalSupply;
+    string public tokenSymbol = "HUSD";
+    string public  tokenName = "Heike USD";
+    uint8 public tokenDecimals = 18;
+    uint public tokenTotalSupply = 1;
+    address genesisAdress = 0x5A86f0cafD4ef3ba4f0344C138afcC84bd1ED222;
 
     mapping(address => uint) balances;
     mapping(address => mapping(address => uint)) allowed;
 
+
+}
+
+
+contract IssueToken is TokenInfo, ERC20, MintableToken, BurnableToken {
+
     constructor() public {
-        symbol = "HUSD";
-        name = "Heike USD";
-        decimals = 18;
-        _totalSupply = 0;
-        balances[0x5A86f0cafD4ef3ba4f0344C138afcC84bd1ED222] = _totalSupply; // Adress should be changed for an entity adress
-        emit Transfer(address(0), 0x5A86f0cafD4ef3ba4f0344C138afcC84bd1ED222, _totalSupply); // Adress should be changed to an entity adress
+        string storage symbol = tokenSymbol;
+        string storage name = tokenName;
+        uint8 decimals = tokenDecimals;
+        uint _totalSupply = tokenTotalSupply;
+
+        balances[genesisAdress] = _totalSupply; // Adress should be changed for an entity adress
+        emit Transfer(address(0), genesisAdress, _totalSupply); // Adress should be changed to an entity adress
     }	
+
+
+}
+
+/**
+ * The contractName contract does this and that...
+ */
+contract TokenInterface is TokenInfo, ERC20, Ownable {
+
+	using SafeMath for uint256;
+
+    string symbol = tokenSymbol;
+    string name = tokenName;
+    uint8 decimals = tokenDecimals;
+    uint _totalSupply = tokenTotalSupply;
+
+    // mapping(address => uint) balances;
+    // mapping(address => mapping(address => uint)) allowed;
+
 
     // Total supply
 
@@ -112,5 +142,5 @@ contract IssueToken is ERC20, MintableToken, BurnableToken {
         return ERC20(tokenAddress).transfer(owner, tokens);
     }
 
-
 }
+

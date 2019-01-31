@@ -2,7 +2,7 @@ pragma solidity ^0.5.0;
 import "./token.sol";
 
 
-contract Heike is IssueToken {
+contract Heike is TokenInterface {
     
     bytes32 zeroBytes = 0x0000000000000000000000000000000000000000000000000000000000000000;
     
